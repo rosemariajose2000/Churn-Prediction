@@ -1,28 +1,36 @@
 import streamlit as st
+import pandas as pd
 import joblib
-import numpy as np
-model = joblib.load("model.pkl")
+
+# Load the saved model and scaler
+model = joblib.load("svm_churn_model.pkl")
 scaler = joblib.load("scaler.pkl")
-st.title('Churn Prediction App')
 
-st.divider()
+# App title
+st.title("Customer Churn Prediction")
+st.write("Predict whether a telecom customer is likely to leave the company.")
 
-st.write("Please enter the values and hit the predict button for getting a prediction.")
-st.divider()
-age=st.number_input('Enter Age',min_value=10,max_value=100,value=30)
-tenure=st.number_input('Enter Tenure',min_value=0,max_value=130,value=10)
-monthlycharge=st.number_input('Enter Monthly Charge',min_value=30,max_value=150)
-gender=st.selectbox('Enter the Gender',['Male','Female'])
+# User inputs
+age = st.number_input("Age", min_value=18, max_value=100, value=30)
+gender = st.selectbox("Gender", ["Male", "Female"])
+tenure = st.number_input("Tenure (months)", min_value=0, value=12)
+monthly_charges = st.number_input(
+    "Monthly Charges", min_value=0.0, value=50.0
+)
 
-st.divider()
-predictbutton=st.button('Predict!')
-if predictbutton:
-    gender_selected=1 if gender=='female' else 0
-    x=[age,gender_selected,tenure,monthlycharge]
-    x1=np.array(x)
-    x_array= scaler.transform([x1])
-    prediction=model.predict(x_array)[0]
-    predicted="churn" if prediction==1 else "No"
-    st.write(f"predicted: {predicted}")
-else:
-    st.write('Please enter the values and use predict button')
+if st.button("Predict Churn"):
+    # IMPORTANT: Match the gender encoding used in your notebook.
+    gender_encoded = 0 if gender == "Male" else 1
+
+    input_data = pd.DataFrame(
+        [[age, gender_encoded, tenure, monthly_charges]],
+        columns=["Age", "Gender", "Tenure", "MonthlyCharges"]
+    )
+
+    scaled_data = scaler.transform(input_data)
+    prediction = model.predict(scaled_data)
+
+    if prediction[0] == 1:
+        st.error("Prediction: Customer is likely to churn.")
+    else:
+        st.success("Prediction: Customer is likely to stay.")
