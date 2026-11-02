@@ -36,8 +36,13 @@ To predict customer churn and help telecom companies identify customers who may 
 The project compares multiple classification algorithms to identify a suitable churn prediction model. Model selection should consider precision, recall, F1-score, and confusion matrix alongside accuracy.
 
 
-## Project Deployment Link-Customer Churn Prediction
-Local URL: http://localhost:8501 Network URL: http://192.168.1.2:8501
+## 🚀 Live Demo
+
+Try the Customer Churn Prediction application here:
+
+🔗 **[Click here to access the live application](https://churn-prediction-6dp9pzdajkbkyda8ra8bqx.streamlit.app/)**
+
+The application predicts whether a telecom customer is likely to leave the company using customer information.
 
 ## Author
 Rosemaria Jose
